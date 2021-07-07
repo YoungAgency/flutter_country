@@ -1,67 +1,64 @@
-import 'package:flutter_country/flutter_country.dart';
-import 'package:flutter_country/helpers/flag_string.dart';
-import 'package:flutter_country/models/currency_list.dart';
-import 'package:flutter_country/models/timezone_list.dart';
+import '../helpers/flag_string.dart';
+import 'currency_list.dart';
+import 'timezone_list.dart';
 
 class Country {
-  final String name;
-  final String officialName;
-  final String nativeName;
-  final Map<String,String> translations;
-  final String demonym;
-  final List<String> altSpellings;
+  final String? name;
+  final String? officialName;
+  final String? nativeName;
+  final Map<String, String>? translations;
+  final String? demonym;
+  final List<String>? altSpellings;
   final String alpha2Code;
   final String alpha3Code;
-  final String numericCode;
-  final String olympicCode;
-  final bool independent;
-  final bool unMember;
-  final bool landLocked;
-  final List<String> topLevelDomain;
-  final String capital;
-  final String region;
-  final String subRegion;
-  final CurrencyList currnecies;
-  // final List<Map<String, String>> languages;
-  final List<String> borders;
-  final double area;
-  final List<String> flags;
-  final String flagIcon;
-  final List<String> callingCodes;
-  final List<double> coordinates;
-  final double latitude;
-  final double longitude;
-  final TimeZoneList timeZones;
-  Country(
-      {this.name,
-      this.officialName,
-      this.nativeName,
-      this.alpha2Code,
-      this.alpha3Code,
-      this.numericCode,
-      this.independent,
-      this.unMember,
-      this.topLevelDomain,
-      this.callingCodes,
-      // this.languages,
-      this.currnecies,
-      this.capital,
-      this.region,
-      this.subRegion,
-      this.area,
-      this.flags,
-      this.flagIcon,
-      this.olympicCode,
-      this.coordinates,
-      this.translations,
-      this.latitude,
-      this.longitude,
-      this.altSpellings,
-      this.landLocked,
-      this.borders,
-      this.demonym,
-      this.timeZones
-      });
+  final String? numericCode;
+  final String? olympicCode;
+  final bool? independent;
+  final bool? unMember;
+  final bool? landLocked;
+  final List<String>? topLevelDomain;
+  final String? capital;
+  final String? region;
+  final String? subRegion;
+  final CurrencyList? currencies;
+  final List<String>? borders;
+  final double? area;
+  final List<String>? flags;
+  final String? flagIcon;
+  final List<String>? callingCodes;
+  final List<double>? coordinates;
+  final double? latitude;
+  final double? longitude;
+  final TimeZoneList? timeZones;
+  Country({
+    this.name,
+    this.officialName,
+    this.nativeName,
+    required this.alpha2Code,
+    required this.alpha3Code,
+    this.numericCode,
+    this.independent,
+    this.unMember,
+    this.topLevelDomain,
+    this.callingCodes,
+    this.currencies,
+    this.capital,
+    this.region,
+    this.subRegion,
+    this.area,
+    this.flags,
+    this.flagIcon,
+    this.olympicCode,
+    this.coordinates,
+    this.translations,
+    this.latitude,
+    this.longitude,
+    this.altSpellings,
+    this.landLocked,
+    this.borders,
+    this.demonym,
+    this.timeZones,
+  });
 
   factory Country.fromJosn(Map<String, dynamic> json) => Country(
         alpha2Code: json['alpha2Code'],
@@ -69,7 +66,7 @@ class Country {
         altSpellings: json['altSpellings'].toString() != '[]'
             ? json['altSpellings'].cast<String>()
             : [],
-        area: (json['area'] as num)?.toDouble(), // area in km²
+        area: (json['area'] as num?)?.toDouble(), // area in km²
         borders: json['borders'].toString() != '[]'
             ? json['borders']?.cast<String>()
             : [],
@@ -77,7 +74,7 @@ class Country {
             ? json['callingCodes'].cast<String>()
             : [],
         capital: json['capital'] as String,
-        currnecies: json['currencies'].toString() == '[]'
+        currencies: json['currencies'].toString() == '[]'
             ? null
             : CurrencyList.fromJson(json['currencies']),
         demonym: json['demonym'] ?? '',
@@ -106,12 +103,15 @@ class Country {
         topLevelDomain: json['topLevelDomain'].cast<String>(),
         translations: json['translations'].toString() == '{}'
             ? null
-            : json['translations'] as Map<String,String>,
-        // cioc  geos here
-        //countries that share borders with this country
+            : json['translations'] as Map<String, String>,
       );
 
+  String translate(String code) {
+    if (translations == null) {
+      return "";
+    }
+    return translations!.containsKey(code) ? translations![code]! : '';
+  }
 
-  String translate(String code) =>
-      translations.containsKey(code) ? translations[code] : '';
+  String get flagPng => flags != null && flags!.length > 1 ? flags!.last : "";
 }

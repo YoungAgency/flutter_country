@@ -9,7 +9,7 @@ class CountryList {
 
   factory CountryList.fromJson(List<dynamic> parsedJson) {
     var countries = <Country>[];
-    countries = parsedJson.map((i) => Country.fromJosn(i)).toList();
+    countries = parsedJson.map((i) => Country.fromJson(i)).toList();
     return CountryList(
       countries: countries,
     );
